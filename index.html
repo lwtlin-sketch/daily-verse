@@ -21,7 +21,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 60px; 
+            padding-top: 60px; /* 預留給右上角按鈕的空間 */
         }
 
         .container {
@@ -68,12 +68,12 @@
             margin-bottom: 10px;
         }
 
-        /* PDF 連結按鈕 (素雅風格) */
+        /* PDF 連結按鈕 */
         .pdf-link-btn {
             display: inline-block;
             background-color: #fff;
-            color: #444; /* 深灰色，不刺眼 */
-            border: 1px solid #888; /* 中性灰色邊框 */
+            color: #444;
+            border: 1px solid #888;
             padding: 6px 15px;
             border-radius: 20px;
             text-decoration: none;
@@ -87,17 +87,51 @@
             transform: scale(0.98);
         }
 
-        /* 日期顯示 */
-        .date-display {
-            font-size: 1.3rem;
-            font-weight: bold;
-            padding: 15px 20px;
+        /* --- 新增：日期導航列 --- */
+        .nav-bar {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            gap: 10px;
+            padding: 15px 10px;
             background-color: #fff;
             border-bottom: 1px dashed #999;
+        }
+
+        /* 前一天/後一天按鈕 */
+        .nav-btn {
+            background-color: #f0f0f0;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+            user-select: none;
+        }
+        
+        .nav-btn:active {
+            background-color: #ccc;
+        }
+
+        /* 日期選擇器 */
+        input[type="date"] {
+            font-size: 1.2rem;
+            padding: 5px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            background: #fff;
             color: #000;
+            font-family: inherit;
+        }
+
+        /* 星期顯示 */
+        .weekday-display {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #0000FF;
+            margin-left: 5px;
         }
 
         /* 內容區域 */
@@ -155,7 +189,7 @@
             line-height: 1.6;
         }
 
-        /* --- 字體放大按鈕 (右上角) --- */
+        /* --- 字體放大按鈕 (右上角固定) --- */
         .font-btn {
             position: fixed;
             top: 10px;
@@ -190,6 +224,22 @@
             }
 
             h1 { font-size: 1.4rem; }
+            
+            /* 手機版導航列稍微擠一點沒關係 */
+            .nav-bar {
+                gap: 5px;
+                padding: 10px 5px;
+            }
+            
+            .nav-btn {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+
+            input[type="date"] {
+                font-size: 1rem;
+                width: 130px; /* 限制寬度以免爆版 */
+            }
         }
     </style>
 </head>
@@ -213,10 +263,19 @@
             </a>
         </header>
 
-        <!-- 日期欄位 -->
-        <div class="date-display">
-            <span id="currentDate">載入中...</span>
-            <span id="currentWeekDay"></span>
+        <!-- 日期導航列 -->
+        <div class="nav-bar">
+            <button class="nav-btn" onclick="changeDay(-1)">◀ 前一天</button>
+            
+            <!-- 日期選擇器 -->
+            <input type="date" id="datePicker" onchange="onDateSelect()">
+            
+            <button class="nav-btn" onclick="changeDay(1)">後一天 ▶</button>
+        </div>
+        
+        <!-- 顯示星期 (輔助確認) -->
+        <div style="text-align:center; background:#fff; padding-bottom:5px; border-bottom:1px solid #eee;">
+            <span id="currentWeekDay" class="weekday-display"></span>
         </div>
 
         <!-- 變動內容區域 -->
@@ -235,7 +294,7 @@
     </div>
 
 <script>
-    // 資料庫：完整經節內容
+    // 資料庫
     const db = [
         { date: "2025-12-18", type: "經節", text: "他們進了城，就上了所住的一間樓房，在那裡有彼得、約翰、雅各、安得烈、腓力、多馬、巴多羅買、馬太、亞勒腓的兒子雅各、熱烈派的西門和雅各的兄弟猶大。這些人同著幾個婦人，和耶穌的母親馬利亞，並耶穌的兄弟，都同心合意，堅定持續的禱告。", ref: "(徒一 13-14)" },
         { date: "2025-12-19", type: "經節", text: "五旬節那天到了，門徒都聚集在一處。忽然從天上有響聲下來，好像一陣暴風颳過，充滿了他們所坐的整個屋子。又有舌頭如火焰向他們顯現出來，分開落在他們各人身上，他們就都被聖靈充溢，並且按著那靈所賜的發表，用別種不同的語言說起話來。", ref: "(徒二 1-4)" },
@@ -251,7 +310,7 @@
         { date: "2025-12-29", type: "走上增區增排的路\n確立目標", text: "我們若確立以「增區」為目標，其意義乃是從增多傳福音的人開始，逐步擴展家、排的架構數量，充實生、養、教、建的實行。這代表我們乃是追求扎實、健康的繁殖擴增，並非一時的運動或數字的美化。", ref: "" },
         { date: "2025-12-30", type: "走上增區增排的路\n確立目標", text: "確立增區為目標，是真實在靈中看見「神的祝福就是繁增」、「神的祝福我要接住」及「加深神祝福的水流」後，向著神該有的回應。這也會使我們的召會生活存在「目標感」，而有厲害的翻轉。", ref: "" },
         { date: "2025-12-31", type: "走上增區增排的路\n憑信宣告", text: "「並且照經上所記：『我信，所以我說話；』我們既有這同樣信心的靈，也就信，所以也就說話，」", ref: "(林後四 13)" },
-        // 進入 2026 年 (民國 115 年)
+        // 進入 2026 年
         { date: "2026-01-01", type: "走上增區增排的路\n憑信宣告", text: "在確立以增區為目標時，我們要憑著信心求，一點不疑惑(雅一 6)；相信在人不能，在神凡事都能。(可十 27)；秉持這樣的信念，我們就能「遵命申言」，使氣息「進入骸骨」，成為極大的軍隊，將信心的靈傳輸到區裡的每位聖徒裏面。", ref: "" },
         { date: "2026-01-02", type: "走上增區增排的路\n憑信宣告", text: "此外，我們還要抓住各種機會「憑信大膽地宣告」，一面向自己說，另一面也「吩咐」主成就祂手的工作 (賽四五 11) ，好使我們的宣告能得著應驗！", ref: "" },
         { date: "2026-01-03", type: "走上增區增排的路\n檢核現況", text: "「目標」與「現況」的差距，就是我們該突破的地方，也是經歷神大能作為的機會，所以我們需要務實的檢核小區現況。切莫因為當前光景不佳而拒絕確立目標，屬靈的事「不怕慢，只怕站」。", ref: "" },
@@ -284,6 +343,9 @@
         { date: "2026-01-30", type: "走上增區增排的路\n得著獎賞", text: "(二) 成功增排增區的過程，促使我們過神人的生活並照著神牧養，好被高峰的真理所構成，帶進新的復興，幫助我們能達於錫安。", ref: "" }
     ];
 
+    // 目前顯示的日期物件 (預設今天)
+    let currentDisplayDate = new Date();
+
     // 字體放大功能邏輯
     let currentFontSizeState = 0; 
     const fontStates = [
@@ -300,23 +362,23 @@
         document.getElementById('fontToggleBtn').textContent = newState.label;
     }
 
+    // 更新網頁內容
     function updateContent() {
-        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Taipei' };
+        // 更新顯示文字 (星期)
         const weekDayOptions = { weekday: 'long', timeZone: 'Asia/Taipei' };
-        
-        const targetDateObj = new Date();
-
-        const dateStr = targetDateObj.toLocaleDateString('zh-TW', options);
-        const weekDayStr = targetDateObj.toLocaleDateString('zh-TW', weekDayOptions);
-
-        document.getElementById('currentDate').textContent = dateStr;
+        const weekDayStr = currentDisplayDate.toLocaleDateString('zh-TW', weekDayOptions);
         document.getElementById('currentWeekDay').textContent = weekDayStr;
 
-        const y = targetDateObj.getFullYear();
-        const m = String(targetDateObj.getMonth() + 1).padStart(2, '0');
-        const d = String(targetDateObj.getDate()).padStart(2, '0');
+        // 更新日期選擇器的值 (YYYY-MM-DD)
+        const y = currentDisplayDate.getFullYear();
+        const m = String(currentDisplayDate.getMonth() + 1).padStart(2, '0');
+        const d = String(currentDisplayDate.getDate()).padStart(2, '0');
         const searchKey = `${y}-${m}-${d}`;
+        
+        // 設定 input value (讓它跟著變)
+        document.getElementById('datePicker').value = searchKey;
 
+        // 搜尋資料庫
         const result = db.find(item => item.date === searchKey);
         const contentBox = document.getElementById('dailyContent');
 
@@ -337,6 +399,28 @@
         }
     }
 
+    // 當使用者手動選取日期時
+    function onDateSelect() {
+        const picker = document.getElementById('datePicker');
+        if(picker.value) {
+            // 解析 YYYY-MM-DD
+            // 注意：直接 new Date("2025-12-18") 可能是 UTC，導致時區偏差
+            // 使用 split 自行組裝最保險
+            const [y, m, d] = picker.value.split('-').map(Number);
+            // 設定新的日期
+            currentDisplayDate = new Date(y, m - 1, d);
+            updateContent();
+        }
+    }
+
+    // 切換前後一天 (offset = -1 or 1)
+    function changeDay(offset) {
+        // 增加或減少天數
+        currentDisplayDate.setDate(currentDisplayDate.getDate() + offset);
+        updateContent();
+    }
+
+    // 初始化
     document.addEventListener('DOMContentLoaded', () => {
         updateContent();
     });
