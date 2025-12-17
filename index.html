@@ -2,27 +2,29 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 關鍵修改：移除了 user-scalable=no，允許使用者手動縮放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>晨興經節綱要復習</title>
     <style>
         :root {
             --primary-blue: #0000FF;
-            --highlight-bg: #F0FFF0; /* 淺綠色背景 */
-            --header-bg: #E0F7FA;   /* 淺藍色標頭背景 */
-            --text-color: #333;
+            --highlight-bg: #F0FFF0;
+            --header-bg: #E0F7FA;
+            --text-color: #222; /* 更深的黑色 */
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f4f4;
+            /* 預設字體加大，照顧老花眼 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+            background-color: #eee;
             margin: 0;
-            padding: 20px 10px; /* 上下20px, 左右10px (手機版邊距) */
+            padding: 10px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* 讓內容在畫面較大時稍微置中，但保留捲動彈性 */
-            justify-content: flex-start; 
+            /* 預留上方工具列空間 */
+            padding-top: 70px; 
         }
 
         .container {
@@ -31,102 +33,100 @@
             max-width: 800px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             border: 1px solid #999;
-            border-radius: 8px; /* 稍微圓角看起來比較現代 */
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden; /* 確保圓角不被內容切掉 */
-            margin-top: 50px; /* 留位置給上方的測試工具 */
+            overflow: hidden;
         }
 
         /* 標頭區域 */
         header {
-            background-color: var(--header-bg); /* 強制淺藍底色，更像卡片 */
+            background-color: var(--header-bg);
             text-align: center;
             padding: 15px 10px;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 2px solid #bbb;
         }
 
         h1 {
-            font-size: 1.4rem;
-            margin: 0 0 8px 0;
+            font-size: 1.6rem;
+            margin: 0 0 10px 0;
             font-weight: normal;
-            color: #222;
+            color: #000;
         }
 
         .main-theme {
             color: var(--primary-blue);
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             margin-bottom: 5px;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         .sub-theme {
             color: var(--primary-blue);
             font-weight: bold;
-            font-size: 1rem;
-            line-height: 1.3;
+            font-size: 1.2rem;
+            line-height: 1.4;
         }
 
         /* 日期顯示 */
         .date-display {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            padding: 12px 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             background-color: #fff;
-            border-bottom: 1px dashed #ccc;
-            color: #444;
+            border-bottom: 1px dashed #999;
+            color: #000;
         }
 
-        /* 內容區域 */
+        /* 內容區域 - 預設字體加大 */
         .content-box {
             padding: 20px 25px;
-            font-size: 1.15rem;
-            line-height: 1.8; /* 增加行距，手機閱讀更舒適 */
+            font-size: 1.35rem; /* 預設加大 */
+            line-height: 1.8;   /* 行距拉開 */
             background-color: #fff;
-            text-align: justify; /* 文字左右對齊 */
-            
-            /* 修改處：移除 flex-grow 和固定高度，解決空白過大問題 */
-            min-height: 150px; 
+            text-align: justify;
+            color: #000; /* 純黑字體 */
+            min-height: 200px;
         }
 
         .section-label {
-            color: #D32F2F; /* 深紅色比較不刺眼 */
+            color: #D32F2F;
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             text-align: center;
             display: block;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
         }
 
         .verse-ref {
             font-weight: bold;
             text-align: right;
             display: block;
-            margin-top: 15px;
-            color: #555;
-            font-size: 1rem;
+            margin-top: 20px;
+            color: #444;
+            font-size: 1.2rem;
         }
 
         /* 頁尾區域 */
         footer {
             background-color: var(--header-bg);
-            padding: 15px 20px;
+            padding: 20px;
             text-align: center;
-            font-size: 0.95rem;
-            border-top: 1px solid #ccc;
-            color: #444;
+            font-size: 1.1rem;
+            border-top: 2px solid #ccc;
+            color: #222;
         }
 
         .footer-title {
             font-weight: bold;
             margin-bottom: 10px;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             color: #000;
         }
 
@@ -134,80 +134,105 @@
             text-align: left;
             display: inline-block;
             line-height: 1.6;
-            font-size: 0.9rem;
         }
 
-        /* --- 測試工具樣式 (優化版) --- */
-        .debug-controls {
+        /* --- 工具列 (測試 + 字體調整) --- */
+        .tools-bar {
             width: 100%;
             max-width: 800px;
-            background: #fff3e0; /* 淺橘色背景提醒這是測試區 */
-            padding: 8px;
-            border: 1px solid #ffb74d;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-sizing: border-box;
-            position: absolute;
+            background: #fff;
+            padding: 10px;
+            border-bottom: 2px solid #0000FF; /* 藍色底線明顯 */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: fixed;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 100;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* 左右分開 */
+            box-sizing: border-box;
+        }
+
+        .tools-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 字體放大按鈕 */
+        .font-btn {
+            background-color: #0000FF;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 8px 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         
-        .debug-controls input {
+        .font-btn:active {
+            background-color: #000099;
+            transform: scale(0.95);
+        }
+
+        /* 日期選擇器加大，好點選 */
+        input[type="date"] {
+            font-size: 1rem;
             padding: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+            border: 1px solid #999;
+            border-radius: 5px;
+            background: #fff;
+        }
+
+        .label-text {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #333;
         }
 
         /* --- 手機版 RWD 調整 --- */
         @media (max-width: 600px) {
             body {
-                padding: 45px 0 0 0; /* 上方留給測試條，左右貼邊 */
+                padding: 75px 0 0 0; /* 貼邊 */
             }
 
             .container {
-                margin-top: 10px;
-                border-radius: 0; /* 手機版滿版不需要圓角 */
-                border-left: none;
-                border-right: none;
+                border-radius: 0;
+                border: none;
                 box-shadow: none;
             }
 
-            .debug-controls {
-                position: fixed; /* 手機版固定在最上方 */
-                top: 0;
-                border-radius: 0;
-                margin-bottom: 0;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            .tools-bar {
+                padding: 10px;
             }
 
-            h1 { font-size: 1.2rem; }
-            .main-theme { font-size: 1rem; }
-            .sub-theme { font-size: 0.9rem; }
+            .label-text {
+                display: none; /* 手機畫面小，隱藏「測試日期」這幾個字 */
+            }
             
-            .content-box {
-                padding: 15px 20px;
-                font-size: 1.1rem; /* 手機字體微調 */
-            }
-
-            .lyrics {
-                font-size: 0.85rem;
-            }
+            /* 手機上標題稍微縮小一點點，避免換行太醜，但內文保持大 */
+            h1 { font-size: 1.4rem; }
+            .main-theme { font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 測試工具 (手機版固定在頂端，電腦版在卡片上方) -->
-    <div class="debug-controls">
-        <span>🛠️ 測試日期：</span>
-        <input type="date" id="testDate">
+    <!-- 頂部浮動工具列 -->
+    <div class="tools-bar">
+        <div class="tools-left">
+            <!-- 字體放大按鈕 -->
+            <button class="font-btn" id="fontToggleBtn" onclick="toggleFontSize()">A+ 字體放大</button>
+        </div>
+        
+        <div class="tools-right">
+            <span class="label-text">📅 日期：</span>
+            <input type="date" id="testDate">
+        </div>
     </div>
 
     <div class="container">
@@ -509,6 +534,27 @@
         }
     ];
 
+    // 字體放大功能邏輯
+    let currentFontSizeState = 0; // 0: 預設(大), 1: 特大, 2: 超大
+    const fontStates = [
+        { size: '1.35rem', label: 'A+ 字體放大' },
+        { size: '1.7rem', label: 'A++ 特大字體' },
+        { size: '2.0rem', label: '↺ 恢復預設' }
+    ];
+
+    function toggleFontSize() {
+        // 切換狀態
+        currentFontSizeState = (currentFontSizeState + 1) % fontStates.length;
+        const newState = fontStates[currentFontSizeState];
+        
+        // 套用 CSS
+        const contentBox = document.getElementById('dailyContent');
+        contentBox.style.fontSize = newState.size;
+        
+        // 更新按鈕文字
+        document.getElementById('fontToggleBtn').textContent = newState.label;
+    }
+
     function updateContent(inputDate) {
         // 設定台灣時間顯示
         const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Taipei' };
@@ -550,7 +596,7 @@
                 <p style="text-align:center; color:#555; margin-top:20px;">
                     日期：${searchKey}<br>
                     本日不在 2025/12/18 - 2026/01/30 範圍內。<br><br>
-                    <b>💡 請使用上方測試工具選擇有效日期。</b>
+                    <b>💡 請使用上方工具列選擇有效日期。</b>
                 </p>
             `;
         }
