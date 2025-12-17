@@ -21,7 +21,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* 預留一點上方空間給浮動按鈕 */
             padding-top: 60px; 
         }
 
@@ -66,27 +65,25 @@
             font-weight: bold;
             font-size: 1.2rem;
             line-height: 1.4;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-        /* PDF 下載按鈕樣式 */
+        /* PDF 連結按鈕 (素雅風格) */
         .pdf-link-btn {
             display: inline-block;
             background-color: #fff;
-            color: #D32F2F; /* 使用顯眼的紅色或深藍色 */
-            border: 1px solid #D32F2F;
-            padding: 10px 15px;
-            border-radius: 50px;
+            color: #444; /* 深灰色，不刺眼 */
+            border: 1px solid #888; /* 中性灰色邊框 */
+            padding: 6px 15px;
+            border-radius: 20px;
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            line-height: 1.4;
+            font-size: 0.95rem;
+            margin-top: 5px;
             transition: all 0.2s;
         }
 
         .pdf-link-btn:active {
-            background-color: #ffebee;
+            background-color: #ddd;
             transform: scale(0.98);
         }
 
@@ -123,7 +120,7 @@
             margin-bottom: 20px;
             letter-spacing: 1px;
             line-height: 1.4;
-            white-space: pre-line; /* 讓標題若有換行符號能正確顯示 */
+            white-space: pre-line;
         }
 
         .verse-ref {
@@ -158,7 +155,7 @@
             line-height: 1.6;
         }
 
-        /* --- 字體放大按鈕 (固定在右上角) --- */
+        /* --- 字體放大按鈕 (右上角) --- */
         .font-btn {
             position: fixed;
             top: 10px;
@@ -192,10 +189,6 @@
                 box-shadow: none;
             }
 
-            .pdf-link-btn {
-                font-size: 0.95rem; /* 手機上按鈕字稍微小一點以免太擠 */
-            }
-
             h1 { font-size: 1.4rem; }
         }
     </style>
@@ -212,11 +205,11 @@
             <div class="main-theme">主題：奔跑增排增區的賽程(四)</div>
             <div class="sub-theme">檢核光景、持守祝福、逐步達標</div>
             
-            <!-- 新增 PDF 連結 -->
+            <!-- PDF 連結 -->
             <a href="https://flowingstream.org/wp-content/uploads/2025/12/%E5%A5%94%E8%B7%91%E5%A2%9E%E6%8E%92%E5%A2%9E%E5%8D%80%E7%9A%84%E8%B3%BD%E7%A8%8B%E5%9B%9B-%E6%AA%A2%E6%A0%B8%E5%85%89%E6%99%AF%E3%80%81%E6%8C%81%E5%AE%88%E7%A5%9D%E7%A6%8F%E3%80%81%E9%80%90%E6%AD%A5%E9%81%94%E6%A8%99.pdf" 
                target="_blank" 
                class="pdf-link-btn">
-               📥 奔跑增排增區的賽程四-檢核光景、持守祝福、逐步達標
+               📎 綱要連結
             </a>
         </header>
 
@@ -243,7 +236,6 @@
 
 <script>
     // 資料庫：完整經節內容
-    // 說明：程式會將日期自動轉換 (114 -> 2025, 115 -> 2026)
     const db = [
         { date: "2025-12-18", type: "經節", text: "他們進了城，就上了所住的一間樓房，在那裡有彼得、約翰、雅各、安得烈、腓力、多馬、巴多羅買、馬太、亞勒腓的兒子雅各、熱烈派的西門和雅各的兄弟猶大。這些人同著幾個婦人，和耶穌的母親馬利亞，並耶穌的兄弟，都同心合意，堅定持續的禱告。", ref: "(徒一 13-14)" },
         { date: "2025-12-19", type: "經節", text: "五旬節那天到了，門徒都聚集在一處。忽然從天上有響聲下來，好像一陣暴風颳過，充滿了他們所坐的整個屋子。又有舌頭如火焰向他們顯現出來，分開落在他們各人身上，他們就都被聖靈充溢，並且按著那靈所賜的發表，用別種不同的語言說起話來。", ref: "(徒二 1-4)" },
@@ -293,7 +285,7 @@
     ];
 
     // 字體放大功能邏輯
-    let currentFontSizeState = 0; // 0: 預設(大), 1: 特大, 2: 超大
+    let currentFontSizeState = 0; 
     const fontStates = [
         { size: '1.35rem', label: 'A+ 字體放大' },
         { size: '1.7rem', label: 'A++ 特大字體' },
@@ -301,24 +293,17 @@
     ];
 
     function toggleFontSize() {
-        // 切換狀態
         currentFontSizeState = (currentFontSizeState + 1) % fontStates.length;
         const newState = fontStates[currentFontSizeState];
-        
-        // 套用 CSS
         const contentBox = document.getElementById('dailyContent');
         contentBox.style.fontSize = newState.size;
-        
-        // 更新按鈕文字
         document.getElementById('fontToggleBtn').textContent = newState.label;
     }
 
     function updateContent() {
-        // 設定台灣時間顯示
         const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Taipei' };
         const weekDayOptions = { weekday: 'long', timeZone: 'Asia/Taipei' };
         
-        // 自動抓取今天日期
         const targetDateObj = new Date();
 
         const dateStr = targetDateObj.toLocaleDateString('zh-TW', options);
@@ -327,13 +312,11 @@
         document.getElementById('currentDate').textContent = dateStr;
         document.getElementById('currentWeekDay').textContent = weekDayStr;
 
-        // 格式化日期搜尋 (YYYY-MM-DD)
         const y = targetDateObj.getFullYear();
         const m = String(targetDateObj.getMonth() + 1).padStart(2, '0');
         const d = String(targetDateObj.getDate()).padStart(2, '0');
         const searchKey = `${y}-${m}-${d}`;
 
-        // 搜尋資料庫
         const result = db.find(item => item.date === searchKey);
         const contentBox = document.getElementById('dailyContent');
 
@@ -354,7 +337,6 @@
         }
     }
 
-    // 初始化
     document.addEventListener('DOMContentLoaded', () => {
         updateContent();
     });
