@@ -2,11 +2,11 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <!-- 確保視窗寬度對應設備寬度，並不允許縮放破壞版面，但允許手指縮放 -->
+    <!-- 確保視窗寬度對應設備寬度，解決手機版面問題 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>晨興經節綱要復習</title>
     <style>
-        /* --- 核心修正 1: 全域盒模型設定，防止版面撐開 --- */
+        /* 全域設定：防止元件撐開寬度 */
         * {
             box-sizing: border-box;
         }
@@ -22,14 +22,13 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
             background-color: #eee;
             margin: 0;
-            /* 手機版左右留少一點白邊 */
-            padding: 5px; 
-            padding-top: 60px; /* 預留上方固定按鈕空間 */
+            padding: 0; /* 手機版貼邊 */
+            padding-top: 60px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden; /* 防止橫向捲軸 */
+            overflow-x: hidden;
         }
 
         .container {
@@ -38,7 +37,7 @@
             max-width: 800px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             border: 1px solid #999;
-            border-radius: 8px;
+            border-radius: 8px; /* 電腦版圓角 */
             display: flex;
             flex-direction: column;
             position: relative;
@@ -121,7 +120,7 @@
             padding: 10px 5px;
             background-color: #fff;
             border-bottom: 1px dashed #999;
-            flex-wrap: wrap; /* 允許手機版換行 */
+            flex-wrap: wrap;
         }
 
         .nav-btn {
@@ -134,7 +133,7 @@
             font-weight: bold;
             color: #333;
             user-select: none;
-            white-space: nowrap; /* 防止按鈕文字換行 */
+            white-space: nowrap;
         }
         
         .nav-btn:active {
@@ -149,7 +148,7 @@
             background: #fff;
             color: #000;
             font-family: inherit;
-            max-width: 140px; /* 限制寬度以免擠壓按鈕 */
+            max-width: 150px;
         }
 
         .weekday-display {
@@ -169,7 +168,7 @@
             color: #000;
             min-height: 200px;
             
-            /* --- 核心修正 2: 強制長文字換行 --- */
+            /* 強制長文字換行，修復手機版破版 */
             word-wrap: break-word;
             overflow-wrap: break-word; 
         }
@@ -219,7 +218,7 @@
             font-size: 1rem;
         }
 
-        /* --- 字體放大按鈕 (右上角固定) --- */
+        /* --- 字體放大按鈕 --- */
         .font-btn {
             position: fixed;
             top: 10px;
@@ -256,10 +255,10 @@
 
         .modal-content {
             background-color: #fff;
-            margin: 10% auto; /* 增加上方距離 */
+            margin: 10% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 90%; /* 手機版寬度 */
+            width: 90%;
             max-width: 600px;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -271,67 +270,4 @@
         .close-x {
             color: #aaa;
             float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .modal-h2 {
-            color: #0000FF;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-top: 0;
-            font-size: 1.5rem;
-        }
-
-        .modal-section {
-            margin-bottom: 15px;
-        }
-        
-        .modal-section h3 {
-            color: #D32F2F;
-            margin-bottom: 8px;
-            font-size: 1.2rem;
-        }
-
-        .close-big-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #0000FF;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        /* --- 手機版特別調整 (Media Query) --- */
-        @media (max-width: 600px) {
-            body {
-                padding: 0; /* 手機版移除 body 內距，讓卡片滿版 */
-                padding-top: 55px;
-            }
-            
-            .container {
-                border-radius: 0;
-                border-left: none;
-                border-right: none;
-                box-shadow: none;
-                width: 100%;
-            }
-
-            h1 { font-size: 1.3rem; }
-            .main-theme { font-size: 1.1rem; }
-            .sub-theme { font-size: 1rem; }
-            
-            .content-box {
-                padding: 15px; /* 內距稍微縮小 */
-                font-size: 1.25rem; /* 字體稍微縮小適配 */
-            }
-
-            .section-label {
-                font-size: 1.2rem;
+            font-
